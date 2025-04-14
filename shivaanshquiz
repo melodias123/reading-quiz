@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>KS2 SATs Reading Quiz</title>
+  <style>
+    body {
+      font-family: 'Georgia', serif;
+      line-height: 1.6;
+      max-width: 900px;
+      margin: auto;
+      padding: 20px;
+      background-color: #fdfdfd;
+    }
+    h1, h2 {
+      text-align: center;
+    }
+    .passage {
+      background-color: #f4f4f4;
+      padding: 15px;
+      border-left: 5px solid #888;
+      margin-bottom: 20px;
+    }
+    .question {
+      margin-bottom: 20px;
+    }
+    textarea {
+      width: 100%;
+      height: 100px;
+      padding: 10px;
+      font-size: 1em;
+      font-family: inherit;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+    }
+    #results {
+      background-color: #e9f9e9;
+      border-left: 5px solid #4CAF50;
+      padding: 15px;
+      display: none;
+    }
+    button {
+      padding: 10px 20px;
+      font-size: 1em;
+      background-color: #4CAF50;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      display: block;
+      margin: 20px auto;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>KS2 SATs Challenge Reading Quiz</h1>
+  <h2><em>The Clockmaker’s Secret</em></h2>
+
+  <div class="passage">
+    <p>In the heart of the crooked town of Eldergate, where chimneys leaned like tired men and cobbled streets echoed with forgotten stories, stood a peculiar little shop. It was called <em>Tock & Trinket</em>, and it sold nothing but clocks—grandfather clocks, cuckoo clocks, pocket watches, and strange devices that ticked in ways no one quite understood.</p>
+
+    <p>The shop’s owner, Mr. Thimblewick, was an elderly man with spectacles so thick they magnified his eyes to the size of marbles. He was always seen tinkering with gears and springs, murmuring to himself about "the precision of time." But there was a rumour, passed from child to child like a precious secret, that Mr. Thimblewick owned a clock that could turn back time—but only for a single minute.</p>
+
+    <p>One rainy afternoon, curious eleven-year-old Elsie Tipton dared to enter <em>Tock & Trinket</em>. The door creaked like a groaning ghost, and the scent of brass, dust, and something unnameably ancient curled in the air. "What are you looking for, young lady?" came a voice that seemed to echo from the very walls.</p>
+
+    <p>“I’m just browsing,” Elsie said bravely, her eyes wide with wonder.</p>
+
+    <p>“Be careful what you wish to change,” the voice warned. “Some moments are meant to remain unchanged.”</p>
+  </div>
+
+  <form id="quiz-form">
+    <div class="question">
+      <strong>1. What atmosphere does the author create in the first paragraph, and how is it achieved?</strong><br>
+      <textarea name="q1"></textarea>
+    </div>
+
+    <div class="question">
+      <strong>2. What do the children believe about Mr. Thimblewick, and what does that suggest about his character?</strong><br>
+      <textarea name="q2"></textarea>
+    </div>
+
+    <div class="question">
+      <strong>3. Pick a phrase that shows the age or mystery of the shop, and explain why it is effective.</strong><br>
+      <textarea name="q3"></textarea>
+    </div>
+
+    <div class="question">
+      <strong>4. Why might the author have described the door as creaking "like a groaning ghost"? What effect does this have?</strong><br>
+      <textarea name="q4"></textarea>
+    </div>
+
+    <div class="question">
+      <strong>5. What do you think Mr. Thimblewick meant by "Some moments are meant to remain unchanged"? Use evidence from the text to support your answer.</strong><br>
+      <textarea name="q5"></textarea>
+    </div>
+
+    <div class="question">
+      <strong>6. How is Elsie described in the passage, and what impression does this give you of her personality?</strong><br>
+      <textarea name="q6"></textarea>
+    </div>
+
+    <div class="question">
+      <strong>7. If you could turn back time for one minute, what would you change? Explain your answer.</strong><br>
+      <textarea name="q7"></textarea>
+    </div>
+
+    <button type="button" onclick="evaluateAnswers()">Submit Answers</button>
+  </form>
+
+  <div id="results"></div>
+
+  <script>
+    function evaluateAnswers() {
+      const form = document.getElementById('quiz-form');
+      const results = document.getElementById('results');
+      const answers = {
+        q1: 'The author creates a mysterious and eerie atmosphere using imagery such as “chimneys leaned like tired men” and “forgotten stories.”',
+        q2: 'They believe he owns a clock that can turn back time, suggesting he is mysterious, perhaps magical, and not entirely trusted.',
+        q3: '“Something unnameably ancient” suggests deep history and mystery, making the shop feel magical or timeless.',
+        q4: 'It creates a spooky effect and sets the tone for mystery and suspense.',
+        q5: 'He means that trying to change the past might have unexpected consequences. The warning shows time should not be meddled with.',
+        q6: 'Elsie is described as curious and brave, which shows she’s adventurous and not easily frightened.',
+        q7: 'This is a personal question, so no fixed answer.'
+      };
+
+      const userAnswers = new FormData(form);
+      let feedback = "<h3>Results:</h3><ul>";
+      let strengths = [], weaknesses = [];
+
+      for (let [key, value] of userAnswers.entries()) {
+        if (!value.trim()) {
+          feedback += `<li><strong>Question ${key[1]}:</strong> No answer provided.</li>`;
+          weaknesses.push(`Q${key[1]}`);
+          continue;
+        }
+        if (key !== 'q7' && value.toLowerCase().includes(answers[key].split(' ')[0].toLowerCase())) {
+          feedback += `<li><strong>Question ${key[1]}:</strong> ✅ Looks strong.</li>`;
+          strengths.push(`Q${key[1]}`);
+        } else {
+          feedback += `<li><strong>Question ${key[1]}:</strong> ⚠ Might need improvement. Model answer: ${answers[key]}</li>`;
+          weaknesses.push(`Q${key[1]}`);
+        }
+      }
+
+      feedback += "</ul>";
+
+      feedback += `<h3>Strengths:</h3><p>You did well on: ${strengths.join(', ') || 'None yet. Keep going!'}</p>`;
+      feedback += `<h3>Areas to Improve:</h3><p>Work on: ${weaknesses.join(', ') || 'None! Great job!'}</p>`;
+
+      feedback += `<h3>Suggested Learning Plan:</h3><ul>`;
+      if (weaknesses.includes('Q1')) feedback += "<li>Practice identifying setting and mood through imagery.</li>";
+      if (weaknesses.includes('Q2')) feedback += "<li>Review how to infer character traits from text.</li>";
+      if (weaknesses.includes('Q3')) feedback += "<li>Work on finding and explaining effective phrases.</li>";
+      if (weaknesses.includes('Q4')) feedback += "<li>Explore how similes create mood or tone.</li>";
+      if (weaknesses.includes('Q5')) feedback += "<li>Practice interpreting dialogue and messages in text.</li>";
+      if (weaknesses.includes('Q6')) feedback += "<li>Review describing characters and their traits.</li>";
+      feedback += "</ul>";
+
+      results.innerHTML = feedback;
+      results.style.display = 'block';
+      window.scrollTo(0, document.body.scrollHeight);
+    }
+  </script>
+
+</body>
+</html>
